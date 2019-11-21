@@ -15,7 +15,7 @@ ADD ./devday2019project-0.0.1-SNAPSHOT.jar /opt/devday2019
 ADD ./group3_application.properties /opt/devday2019
 
 run ls -l /opt/devday2019
-
+EXPOSE 18080
 
 # Set the default command to run on boot
 # This will start Spring boot application by default on port 
