@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:              # tells what pods the deployment will apply to, refer to line number 11 for pod template
+      app: devday-backend
+  template:                   # actually, this is the pod template, describes a pod that is launched
+    metadata:
+      labels:
+        app: devday-backend # this should match with the matchLabels value above, otherwise, this kind of pod will not be controlled by the above deployment
+    spec:
+      containers:
+      - name: backend-container
+        image: team3devday2019.azurecr.io/devday2019/sprintboot:v1
+        # Add opening port
+        ports:                                      #+
+        - containerPort: 18080                       #+
+          name: http                                #+
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:postgresql://team3devopsfinalversion.postgres.database.azure.com:5432/postgres"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "admin123@team3devopsfinalversion"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "Fintech123"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: LoadBalancer
+#  loadBalancerIP: 52.163.191.19 # comment this like for auto generate ip
+#  type: NodePort
+  selector:
+    app: devday-backend
+  ports:
+  - port: 80
+    targetPort: 18080
+    protocol: TCP
+
